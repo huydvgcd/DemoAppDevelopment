@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 using System;
 
-namespace DemoAppDevelopment.Controllers
+namespace DemoAppDevelopment.Models
 {
     [Table("Orders")]
     public class Orders

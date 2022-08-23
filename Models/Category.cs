@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System;
 using DemoAppDevelopment.Enums;
 
-namespace DemoAppDevelopment.Controllers
+namespace DemoAppDevelopment.Models
 {
     [Table("Category")]
     public class Category

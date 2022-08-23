@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 
-namespace DemoAppDevelopment.Controllers
+namespace DemoAppDevelopment.Models
 {
     [Table("Orders Detail")]
     public class OrdersDetail

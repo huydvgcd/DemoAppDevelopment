@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 
-namespace DemoAppDevelopment.Controllers
+namespace DemoAppDevelopment.Models
 {
     public class ApplicationUser : IdentityUser
     {

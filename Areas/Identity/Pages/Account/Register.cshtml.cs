@@ -14,9 +14,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using DemoAppDevelopment.Controllers;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Data;
+using DemoAppDevelopment.Models;
 
 namespace DemoAppDevelopment.Areas.Identity.Pages.Account
 {
