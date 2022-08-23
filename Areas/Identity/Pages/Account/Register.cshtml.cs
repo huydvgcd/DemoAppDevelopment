@@ -7,7 +7,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using DemoAppDevelopment.Areas.Identity.Data;
+using DemoAppDevelopment.Areas.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Data;
 using DemoAppDevelopment.Models;
+using DemoAppDevelopment.Utils;
 
 namespace DemoAppDevelopment.Areas.Identity.Pages.Account
 {

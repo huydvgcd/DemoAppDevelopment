@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.IO;
 using System;
+using DemoAppDevelopment.ViewModels;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace DemoAppDevelopment.Controllers
 {
