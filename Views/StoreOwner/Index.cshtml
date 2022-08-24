@@ -1,0 +1,40 @@
+﻿<h1> This is Store Owner Page</h1>
+
+@model IEnumerable<ApplicationUser>
+
+<form asp-controller="StoreOwner" asp-action="Index" method="post">
+    <p>
+        Search Customer: <input type="text" name="SearchString" />
+        <input type="submit" value="Search" />
+    </p>
+</form>
+<a class="btn-primary btn" asp-action="SendCategoryRequest" asp-controller="StoreOwner">Send Category Request</a>
+<a class="btn-primary btn" asp-action="Index" asp-controller="Book">CRUD Book</a>
+<a class="btn-primary btn" asp-action="ListCustomerOrder" asp-controller="StoreOwner">List Customer Orders</a>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">No</th>
+        <th scope="col">ID</th>
+        <th scope="col">Full Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Address</th>
+
+    </tr>
+    </thead>
+    <tbody>
+
+    @foreach (var item in Model)
+    {
+        <tr> 
+            <th scope="row"></th>
+            <td>@item.Id</td>
+            <td>@item.FullName</td>
+            <td>@item.Email</td>
+            <td>@item.HomeAddress</td>
+        </tr>
+    }
+
+    </tbody>
+</table>
