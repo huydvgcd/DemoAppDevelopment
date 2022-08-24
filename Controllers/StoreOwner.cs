@@ -56,6 +56,37 @@ namespace DemoAppDevelopment.Controllers
 
             return View("Index", listCustomer);
         }
+
+        [HttpGet]
+        public IActionResult SendCategoryRequest()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult SendCategoryRequest(Category category)
+        {
+            if (category == null)
+            {
+                return BadRequest();
+            }
+
+            Category newCategory = new Category();
+
+            newCategory.CategoryName = category.CategoryName;
+            newCategory.Status = Enums.CategoryStatus.InProgess;
+
+            _context.Add(newCategory);
+            _context.SaveChanges();
+
+            return View(newCategory);
+        }
+
+        [HttpGet]
+        public IActionResult ListCustomerOrder()
+        {
+            return View();
+        }
     }
 
     }
