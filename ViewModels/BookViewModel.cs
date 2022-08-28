@@ -7,6 +7,7 @@ namespace DemoAppDevelopment.ViewModels
 {
     public class BookViewModel
     {
+        // test commit on git
         public Book book { set; get; }
         [Required(ErrorMessage = "Please choose profile image")]
         [Display(Name = "Profile Picture")]
