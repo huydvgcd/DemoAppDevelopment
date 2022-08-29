@@ -1,11 +1,13 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@using DemoAppDevelopment.Utils
+@using DemoAppDevelopment.ViewModels
+@using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@using ApplicationDevelopment.Utils
+
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
 
-@model ApplicationDevelopment.ViewModels.AdminViewModel
+@model AdminViewModel
 
 @{
     int RowNo = 0;

@@ -37,8 +37,6 @@ namespace DemoAppDevelopment.Models
         [Display(Name = "Book Quantity")]
         public string Quantity { set; get; }
 
-        [Required(ErrorMessage = "Please choose profile image")]
-        [Display(Name = "Profile Picture")]
-        public string ProfilePicture { get; set; }
+        public byte[] ProfilePicture { get; set; }
     }
 }

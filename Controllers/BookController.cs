@@ -9,6 +9,8 @@ using System;
 using DemoAppDevelopment.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using DemoAppDevelopment.Enums;
+using System.Threading.Tasks;
 
 namespace DemoAppDevelopment.Controllers
 {
@@ -16,29 +18,29 @@ namespace DemoAppDevelopment.Controllers
     {
         private readonly ApplicationDbContext _context;
         public IFormFile ProfileImage { get; set; }
-        private readonly IWebHostEnvironment webHostEnvironment;
 
-        public BookController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+
+        public BookController(ApplicationDbContext context)
         {
             _context = context;
-            this.webHostEnvironment = webHostEnvironment;
+
         }
 
-        private string UploadedFile(BookViewModel model)
-        {
-            string uniqueFileName = null;
-            if (model.ProfileImage != null)
-            {
-                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "images");
-                uniqueFileName = Guid.NewGuid().ToString() + "_" + model.ProfileImage.FileName;
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    model.ProfileImage.CopyTo(fileStream);
-                }
-            }
-            return uniqueFileName;
-        }
+        //private string UploadedFile(BookViewModel model)
+        //{
+        //    string uniqueFileName = null;
+        //    if (model.ProfileImage != null)
+        //    {
+        //        string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "images");
+        //        uniqueFileName = Guid.NewGuid().ToString() + "_" + model.ProfileImage.FileName;
+        //        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+        //        using (var fileStream = new FileStream(filePath, FileMode.Create))
+        //        {
+        //            model.ProfileImage.CopyTo(fileStream);
+        //        }
+        //    }
+        //    return uniqueFileName;
+        //}
 
         [HttpGet]
         public IActionResult Index()
@@ -50,28 +52,51 @@ namespace DemoAppDevelopment.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            var listCategories = _context.Categories.ToList();
-            ViewData["listCategories"] = listCategories;
-            return View();
+            var getCategoryInDb = (from category in _context.Categories
+                                   where category.Status == CategoryStatus.Accepted
+                                   select category).ToList();
+            var model = new BookViewModel
+            {
+                listCategory = getCategoryInDb
+            };
+            return View(model);
         }
 
         [HttpPost]
-        public IActionResult Create(BookViewModel model)
+        public async Task<IActionResult> CreateAsync(BookViewModel model)
         {
-            string uniqueFileName = UploadedFile(model);
-            Book newBook = new Book
+            if (!ModelState.IsValid)
             {
-                Author = model.book.Author,
-                Price = model.book.Price,
-                Title = model.book.Title,
-                Description = model.book.Description,
-                Quantity = model.book.Quantity,
-                CategoryId = model.book.CategoryId,
-                ProfilePicture = uniqueFileName
-            };
+                model = new BookViewModel
+                {
+                    listCategory = _context.Categories
+                    .Where(c => c.Status == Enums.CategoryStatus.Accepted)
+                    .ToList()
+                };
+                return View(model);
+            }
 
-            _context.Books.Add(newBook);
-            _context.SaveChanges();
+            using (var memoryStream = new MemoryStream())
+            {
+                await model.ProfileImage.CopyToAsync(memoryStream);
+
+                var newBook = new Book
+                {
+                    Author = model.book.Author,
+                    Price = model.book.Price,
+                    Title = model.book.Title,
+                    Description = model.book.Description,
+                    Quantity = model.book.Quantity,
+                    CategoryId = model.book.CategoryId,
+                    ProfilePicture = memoryStream.ToArray()
+                };
+
+                _context.Books.Add(newBook);
+                await _context.SaveChangesAsync();
+
+            }
+
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -94,38 +119,87 @@ namespace DemoAppDevelopment.Controllers
         public IActionResult Detail(int id)
         {
             Book book = _context.Books.Include(b => b.Category).FirstOrDefault(b => b.Id == id);
+
+
+            //var bookInDb = _context.Books.Include(t => t.Category)
+            //                .SingleOrDefault(t => t.Id == id);
+            //if (bookInDb is null)
+            //{
+            //    return NotFound();
+            //}
+
+            ViewBag.ImageData = ConvertByteArrayToStringBase64(book.ProfilePicture);
             return View(book);
         }
 
         [HttpGet]
         public IActionResult Update(int id)
         {
-            var listCategories = _context.Categories.ToList();
-            ViewData["listCategories"] = listCategories;
+            var getCategoryInDb = (from category in _context.Categories
+                                   where category.Status == CategoryStatus.Accepted
+                                   select category).ToList();
+            var model = new BookViewModel
+            {
+                listCategory = getCategoryInDb
+            };
 
-            Book book = _context.Books.Include(b => b.Category).FirstOrDefault(b => b.Id == id);
-            return View(book);
+            Book bookToUpdate = _context.Books.Include(b => b.Category).FirstOrDefault(b => b.Id == id);
+
+            model.book = bookToUpdate;
+
+            ViewBag.ImageData = ConvertByteArrayToStringBase64(bookToUpdate.ProfilePicture);
+
+            return View(model);
         }
 
         [HttpPost]
-        public IActionResult Update(Book book)
+        public async Task<IActionResult> UpdateAsync(BookViewModel model)
         {
-            var bookUpdate = _context.Books.Include(b => b.Category).FirstOrDefault(b => b.Id == book.Id);
+            var bookUpdate = _context.Books.Include(b => b.Category).FirstOrDefault(b => b.Id == model.book.Id);
+            if (!ModelState.IsValid)
+            {
+                var getCategoryInDb = (from category in _context.Categories
+                                       where category.Status == CategoryStatus.Accepted
+                                       select category).ToList();
+                model.listCategory = getCategoryInDb;
 
-            bookUpdate.Author = book.Author;
-            bookUpdate.Price = book.Price;
-            bookUpdate.Title = book.Title;
-            bookUpdate.Description = book.Description;
-            bookUpdate.Quantity = book.Quantity;
-            bookUpdate.CategoryId = book.CategoryId;
+                ViewBag.ImageData = ConvertByteArrayToStringBase64(bookUpdate.ProfilePicture);
+                return View(model);
+            }
 
 
 
+            bookUpdate.Author = model.book.Author;
+            bookUpdate.Price = model.book.Price;
+            bookUpdate.Title = model.book.Title;
+            bookUpdate.Description = model.book.Description;
+            bookUpdate.Quantity = model.book.Quantity;
+            bookUpdate.CategoryId = model.book.CategoryId;
 
-            _context.Books.Update(bookUpdate);
-            _context.SaveChanges();
+            if (model.ProfileImage != null)
+            {
+                using (var memoryStream = new MemoryStream())
+
+                {
+                    await model.ProfileImage.CopyToAsync(memoryStream);
+
+                    if (memoryStream != null)
+                        bookUpdate.ProfilePicture = memoryStream.ToArray();
+                }
+
+            }
+            await _context.SaveChangesAsync();
+
 
             return RedirectToAction("Index");
+        }
+
+        [NonAction]
+        private string ConvertByteArrayToStringBase64(byte[] imageArray)
+        {
+            string imageBase64Data = Convert.ToBase64String(imageArray);
+
+            return string.Format("data:image/jpg;base64, {0}", imageBase64Data);
         }
     }
 }
