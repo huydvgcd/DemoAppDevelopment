@@ -16,11 +16,14 @@ namespace DemoAppDevelopment.Models
 
         [Display(Name = "Book Id")]
         public int? BookId { set; get; }
-
-        [ForeignKey("BookId")]
         public Book Book { set; get; }
 
+
         [Display(Name = "Quantity")]
+        [Range(1, 100)]
         public int Quantity { set; get; }
+
+        [Display(Name = "Total")]
+        public int Total { set; get; }
     }
 }

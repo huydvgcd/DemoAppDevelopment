@@ -16,5 +16,10 @@ namespace DemoAppDevelopment.Models
 
         [ForeignKey("BookId")]
         public Book Book { set; get; }
+
+        [Range(1, 100)]
+        public int Quantity { set; get; }
+
+        public int Total { set; get; }
     }
 }

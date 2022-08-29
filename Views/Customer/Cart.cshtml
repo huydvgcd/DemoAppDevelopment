@@ -1,0 +1,117 @@
+﻿@using Microsoft.AspNetCore.Razor.Language
+@using Microsoft.AspNetCore.Http.Features
+@using Microsoft.VisualBasic.CompilerServices
+@model List<Cart>
+
+@{
+    var total = 0;
+}
+
+<form asp-controller="Customer" asp-action="SearchItem" method="post">
+    <p>
+        Search Customer: <input type="text" name="SearchString" />
+        <input type="submit" value="Search" />
+    </p>
+</form>
+
+<h1>Shopping Cart</h1>
+<section class="h-100 gradient-custom">
+    <div class="container py-5">
+        <div class="row d-flex justify-content-center my-4">
+            <div class="col-md-8">
+                <div class="card mb-4">
+                    <div class="card-header py-3">
+                        <h5 class="mb-0">Your Cart</h5>
+                    </div>
+                    <div class="card-body">
+
+
+                        @foreach (var item in Model)
+                        {
+                            total += item.Total;
+                            <div class="row">
+                                <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
+                                    <!-- Image -->
+                                    <div class="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
+                                        <img src="~/images/@item.Book.ProfilePicture"
+                                         class="w-100" alt="Blue Jeans Jacket" />
+                                        <a href="#!">
+                                            <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
+                                        </a>
+                                    </div>
+                                    <!-- Image -->
+                                </div>
+
+                                <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
+                                    <!-- Data -->
+                                    <p><strong>@item.Book.Title</strong></p>
+                                    <p>Price: @item.Book.Price</p>
+
+                                    <!-- Data -->
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                                    <!-- Quantity -->
+                                    <div class="d-flex mb-4" style="max-width: 300px">
+                                        <a class="btn btn-danger px-3 me-2" asp-action="MinusItem" asp-controller="Order" asp-route-id="@item.BookId">-</a>
+
+                                        <div class="form-outline">
+
+                                            <label class="form-label" style="margin: 5px 10px 0px;">@item.Quantity</label>
+                                            <span asp-validation-for="@item.Quantity" class="text-danger"></span>
+                                        </div>
+
+                                        <a class="btn btn-primary px-3 me-2" asp-action="IncreaseItem" asp-controller="Order" asp-route-id="@item.BookId">+</a>
+                                    </div>
+                                    <!-- Quantity -->
+                                    <!-- Price -->
+                                    <p class="text-start text-md-center">
+                                        <strong>VNĐ: @item.Total</strong>
+                                    </p>
+                                    <!-- Price -->
+                                </div>
+                            </div>
+                            <hr class="my-4" />
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-header py-3">
+                        <h5 class="mb-0">Summary</h5>
+                    </div>
+                    @if (Model.Count == 0)
+                    {
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                            </ul>
+                            <a class="btn btn-primary px-3 me-2" asp-action="Index" asp-controller="Customer">Go back to shopping</a>
+                        </div>
+                    }
+                    else if (Model.Count > 0)
+                    {
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+
+                                <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                                    <div>
+                                        <strong>Total amount</strong>
+                                        <strong>
+                                            <p class="mb-0">(including VAT)</p>
+                                        </strong>
+                                    </div>
+
+                                    <span><strong>@total (VNĐ)</strong></span>
+
+                                </li>
+                            </ul>
+                            <a class="btn btn-primary px-3 me-2" asp-action="CreateOrder" asp-controller="Order">Order</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
