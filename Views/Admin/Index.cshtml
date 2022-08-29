@@ -1,0 +1,62 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using ApplicationDevelopment.Utils
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+@model ApplicationDevelopment.ViewModels.AdminViewModel
+
+@{
+    int RowNo = 0;
+}
+
+<a asp-action="ListCategoriesInProgress" asp-controller="Admin" class="btn btn-primary">Verify Category Request</a>
+<br />
+<h2>All Users</h2>
+
+@{
+    var message = TempData["Message"];
+}
+
+@if (message != null)
+{
+    <h4 class="alert alert-success" role="alert"> <strong>@TempData["Message"]</strong></h4>
+}
+
+<a class="btn btn-info" asp-action="ListRoleUser" asp-controller="Admin" asp-route-selectRole="customer">List Customer Users</a>
+<a class="btn btn-info" asp-action="ListRoleUser" asp-controller="Admin" asp-route-selectRole="storeOwner">List Store Owner Users</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">No</th>
+            <th scope="col">User Email</th>
+            <th scope="col">Full Name</th>
+            <th scope="col">Home Address</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Users)
+        {
+            <tr>
+                <th scope="row">@{
+                        RowNo++;
+                    } @RowNo</th>
+                <td>@item.Email</td>
+                <td>@item.FullName</td>
+                <td>@item.HomeAddress</td>
+                @if (await UserManager.IsInRoleAsync(item, Role.ADMIN))
+                {
+                    <td><a class="text-muted" asp-action="ChangePassword" asp-controller="Admin" asp-route-id=@item.Id></a></td>
+                }
+                else
+                {
+                    <td><a class="btn btn-info" asp-action="ChangePassword" asp-controller="Admin" asp-route-id=@item.Id>Change Password</a></td>
+                }
+
+            </tr>
+        }
+    </tbody>
+</table>
