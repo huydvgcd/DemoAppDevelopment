@@ -2,12 +2,12 @@
 using DemoAppDevelopment.Models;
 using DemoAppDevelopment.Utils;
 using DemoAppDevelopment.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Authorization;
 
 namespace DemoAppDevelopment.Controllers
 {
@@ -205,7 +205,7 @@ namespace DemoAppDevelopment.Controllers
             {
                 return BadRequest();
             }
-
+            
             categoryVerify.Status = Enums.CategoryStatus.Rejected;
             _context.SaveChanges();
 

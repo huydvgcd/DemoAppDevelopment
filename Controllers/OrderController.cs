@@ -6,9 +6,12 @@ using System.Collections.Generic;
 using System;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using DemoAppDevelopment.Utils;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DemoAppDevelopment.Controllers
 {
+    [Authorize(Roles = Role.CUSTOMER)]
     public class OrderController : Controller
     {
         public readonly ApplicationDbContext _context;
@@ -53,7 +56,9 @@ namespace DemoAppDevelopment.Controllers
                 _context.Carts.Update(itemExitInCart);
                 _context.SaveChanges();
             }
-            return View("../Customer/Index", listBook);
+
+            var listItemInCart = (from item in _context.Carts where item.UserId == userId select item).Include(b => b.Book).ToList();
+            return View("../Customer/Cart", listItemInCart);
         }
 
         [HttpGet]
@@ -142,8 +147,9 @@ namespace DemoAppDevelopment.Controllers
             _context.SaveChanges();
 
             List<Book> listBook = _context.Books.Include(b => b.Category).ToList();
+            var listItemInCart = (from item in _context.Carts where item.UserId == userId select item).Include(b => b.Book).ToList();
 
-            return View("../Customer/Index", listBook);
+            return View("../Customer/Cart", listItemInCart);
         }
 
         public IActionResult ListOrder()

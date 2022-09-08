@@ -11,9 +11,12 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using DemoAppDevelopment.Enums;
 using System.Threading.Tasks;
+using DemoAppDevelopment.Utils;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DemoAppDevelopment.Controllers
-{
+{   
+
     public class BookController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -114,7 +117,6 @@ namespace DemoAppDevelopment.Controllers
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
-
         [HttpGet]
         public IActionResult Detail(int id)
         {
