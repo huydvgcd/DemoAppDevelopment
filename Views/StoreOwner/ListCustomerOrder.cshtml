@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Orders>
+
+<h1>List Customer order</h1>
+
+<a class="btn btn-dark" asp-controller="StoreOwner" asp-action="Index">Go to Store Owner Home</a>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Full Name</th>
+        <th scope="col">Date Time</th>
+        <th scope="col">Address</th>
+        <th scope="col">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            @* <th scope="row">@item.AppUser.Id</th> *@
+            <td>@item.AppUser.FullName</td>
+            <td>@item.OrderTime</td>
+            <td>@item.AppUser.HomeAddress</td>
+            <td>
+                <a class="btn btn-dark" asp-action="OrderCustomerDetail" asp-controller="StoreOwner" asp-route-orderId="@item.Id" asp-route-id="@item.AppUser.Id">Detail</a>
+            </td>
+        </tr>
+
+
+    }
+
+    </tbody>
+</table>
