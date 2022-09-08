@@ -35,7 +35,7 @@ namespace DemoAppDevelopment.Models
         public string Description { set; get; }
 
         [Display(Name = "Book Quantity")]
-        public string Quantity { set; get; }
+        public int Quantity { set; get; }
 
         public byte[] ProfilePicture { get; set; }
     }
