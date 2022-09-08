@@ -1,35 +1,32 @@
-﻿<h1> This is Customer Home Page</h1>
+﻿@model IEnumerable<Orders>
 
-@model IEnumerable<Book>
+<h1>Customer order</h1>
 
-<form asp-controller="Customer" asp-action="SearchItem" method="post">
-    <p>
-        Search Customer: <input type="text" name="SearchString" />
-        <input type="submit" value="Search" />
-    </p>
-</form>
+<a class="btn btn-dark" asp-controller="Customer" asp-action="Index">Go to Shopping</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Full Name</th>
+            <th scope="col">Date Time</th>
+            <th scope="col">Address</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
 
-<a asp-action="Cart" asp-controller="Customer" class="btn btn-primary">Your Cart</a>
-<a asp-action="ListOrder" asp-controller="Order" class="btn btn-primary">Your Orders</a>
 
-<div class="container">
-    <div class="row">
         @foreach (var item in Model)
         {
-            <div class="col-sm-4">
-                <div class="card" style="width: 18rem;">
-                    <img src="~/images/@item.ProfilePicture" class="card-img-top" alt="">
-                    <div class="card-body">
-                        <h5 class="card-title">@item.Title</h5>
-                        <p class="card-text">@item.Description</p>
-                        <p class="card-text">
-                            <strong>Price: @item.Price </strong>
-                        </p>
-                        <a asp-route-id="@item.Id" asp-action="Detail" asp-controller="Book" class="btn btn-primary">Detail</a>
-                        <a asp-route-id="@item.Id" asp-action="AddItemToCart" asp-controller="Order" class="btn btn-primary">Add to Cart</a>
-                    </div>
-                </div>
-            </div>
+            <tr>
+                @* <th scope="row">@item.AppUser.Id</th> *@
+                <td>@item.AppUser.FullName</td>
+                <td>@item.OrderTime</td>
+                <td>@item.AppUser.HomeAddress</td>
+                <td>
+                    <a class="btn btn-dark" asp-action="OrderCustomerDetail" asp-controller="StoreOwner" asp-route-orderId="@item.Id" asp-route-id="@item.AppUser.Id">Detail</a>
+                </td>
+            </tr>
         }
-    </div>
-</div>
+
+    </tbody>
+</table>
