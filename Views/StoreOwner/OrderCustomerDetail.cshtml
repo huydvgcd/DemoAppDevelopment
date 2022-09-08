@@ -1,0 +1,37 @@
+﻿@model List<OrdersDetail>
+<h1>Order Detail</h1>
+
+@{
+    var total = 0;
+}
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Book Name</th>
+        <th scope="col">Category</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Price</th>
+    </tr>
+    </thead>
+    <tbody>
+
+
+    @foreach (var item in Model)
+    {
+        total += item.Total;
+        <tr>
+            <th scope="row">@item.Book.Title</th>
+            <td>@item.Book.Category.CategoryName</td>
+            <td>@item.Quantity</td>
+            <td>@item.Book.Price</td>
+        </tr>
+    }
+    <tr>
+        <th scope="col">Total</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+        <th scope="col"><strong>@total</strong></th>
+    </tr>
+
+    </tbody>
+</table>
