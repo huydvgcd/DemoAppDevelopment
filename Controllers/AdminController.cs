@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DemoAppDevelopment.Controllers
 {
-    //[Authorize(Roles = Role.ADMIN)]
+    [Authorize(Roles = Role.ADMIN)]
     public class AdminController : Controller
     {
         private ApplicationDbContext _context;
