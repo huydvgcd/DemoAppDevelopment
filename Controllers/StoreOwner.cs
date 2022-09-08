@@ -13,19 +13,19 @@ using System.Threading.Tasks;
 
 namespace DemoAppDevelopment.Controllers
 {
-    [Authorize(Roles = Role.STORE_OWNER)]
+    
     public class StoreOwnerController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-
+        
         public StoreOwnerController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
-
-
+        
+        [Authorize(Roles = Role.STORE_OWNER)] 
         [HttpGet]
         public async Task<IActionResult> IndexAsync(List<ApplicationUser> listCustomer)
         {
@@ -37,6 +37,7 @@ namespace DemoAppDevelopment.Controllers
             return View(usersInRole);
         }
 
+        [Authorize(Roles = Role.STORE_OWNER)] 
         [HttpPost]
         public async Task<IActionResult> IndexAsync(string searchString)
         {
@@ -49,7 +50,8 @@ namespace DemoAppDevelopment.Controllers
 
 
         }
-
+        
+        [Authorize(Roles = Role.STORE_OWNER)] 
         [NonAction]
         public async Task<IActionResult> SearchCustomerAsync(string searchString)
         {
@@ -65,7 +67,7 @@ namespace DemoAppDevelopment.Controllers
             return View("Index");
         }
 
-
+        [Authorize(Roles = Role.STORE_OWNER)] 
         [HttpGet]
         public IActionResult SendCategoryRequest()
         {
@@ -73,6 +75,7 @@ namespace DemoAppDevelopment.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Role.STORE_OWNER)] 
         public IActionResult SendCategoryRequest(Category category)
         {
             if (category == null)
@@ -95,6 +98,7 @@ namespace DemoAppDevelopment.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles = Role.STORE_OWNER)] 
         public IActionResult ListCustomerOrder()
         {
 
@@ -103,6 +107,8 @@ namespace DemoAppDevelopment.Controllers
             var order = _context.Orders.Include(u => u.AppUser).Include(b => b.OrdersDetails).ToList();
             return View(order);
         }
+        
+        [Authorize(Roles = Role.CUSTOMER+ ","+ Role.STORE_OWNER)]
         public IActionResult OrderCustomerDetail(int orderId)
         {
             var orderDetail = (from o in _context.OrdersDetails where o.OrderId == orderId select o)
