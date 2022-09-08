@@ -1,10 +1,12 @@
-﻿<h1> This is Customer Home Page</h1>
+﻿@using DemoAppDevelopment.ViewModels
 
-@model IEnumerable<Book>
+<h1> This is Customer Home Page</h1>
+
+@model IEnumerable<BookViewModel>
 
 <form asp-controller="Customer" asp-action="SearchItem" method="post">
     <p>
-        Search Customer: <input type="text" name="SearchString" />
+        Search Item: <input type="text" name="SearchString" />
         <input type="submit" value="Search" />
     </p>
 </form>
@@ -18,10 +20,12 @@
         {
             <div class="col-sm-4">
                 <div class="card" style="width: 18rem;">
-                    <img src="~/images/@item.ProfilePicture" class="card-img-top" alt="">
+                    <img class="card-img-top border-top border-right border-left" style="margin-top:10%; height:65vh; object-fit:cover;"
+                         src="@item.ImageUrl"
+                         alt="image">
                     <div class="card-body">
                         <h5 class="card-title">@item.Title</h5>
-                        <p class="card-text">@item.Description</p>
+                        @*<p class="card-text">@item.book.Description</p>*@
                         <p class="card-text">
                             <strong>Price: @item.Price </strong>
                         </p>
