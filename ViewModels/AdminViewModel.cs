@@ -15,10 +15,7 @@ namespace DemoAppDevelopment.ViewModels
 
         public class InputModel
         {
-
             public string Role { get; set; }
-
-
         }
     }
 }
